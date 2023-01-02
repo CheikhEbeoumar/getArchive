@@ -1,1 +1,1 @@
-web:gunicorn getarchive.wsgi --log-file 
+web: gunicorn getarchive.wsgi --log-file -
