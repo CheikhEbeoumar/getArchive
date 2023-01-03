@@ -22,7 +22,7 @@ def index(request):
           return response
           
      except:
-       return HttpResponse(" Archive introuvable")      
+       return HttpResponse("<h1  style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'> Archive "+ filiere +" " + semester +" N'a pas encore été ajouté</h1>" )      
    else:
      form = ArchiveForm()
      return render(request, 'index.html', {'form': form})
