@@ -1,4 +1,5 @@
 from django.db import models
+import requests
 
 SEMESTER_CHOICES =[
     ('S1', 'Semester1'),
@@ -17,15 +18,23 @@ FILIERE_CHOICES =[
     ('DI', 'Développement Informatique (DI)'),
     ('IG', 'Informatique de Gestion (IG)'),
     ('RT', 'Réseaux informatiques et Télécommunications (RT)'),
-    
-    
-    
 ]
+
+
+
+class CustomFileField(models.FileField):
+    def save(self, name, content, save=True):
+        url = content.name
+        response = requests.get(url, stream=True)
+        content = response.raw.read()
+        super().save(name, content, save)
+        
+        
+        
 class Archive(models.Model):
     filiere = models.CharField(max_length=20 ,choices = FILIERE_CHOICES, default='FC')
     semester = models.CharField(max_length=20 ,choices = SEMESTER_CHOICES, default='S1')
     file_name = models.CharField(max_length=255)
-    files = models.FileField(upload_to='files/', null=True, blank=True)
-    
+    file= CustomFileField(upload_to='files/', blank=True)
     def __str__(self):
          return self.file_name

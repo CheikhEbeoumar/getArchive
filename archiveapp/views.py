@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .forms import ArchiveForm
 from .models import Archive
 import os
+from django.http import StreamingHttpResponse
 
 # def index(request):
 #   form = ArchiveForm()
@@ -15,12 +16,12 @@ def index(request):
           semester = request.POST.get('semester')
           filiere = request.POST.get('filiere')
           archive = Archive.objects.get(semester=semester,filiere=filiere)
-          zip_file=archive.files
+          zip_file=archive.file 
           file_name=archive.file_name
-          response = HttpResponse(zip_file, content_type='application/zip')
+          response = StreamingHttpResponse(zip_file, content_type='application/zip')
           response['Content-Disposition'] = 'attachment; filename= {}'.format(file_name)
           return response
-          
+         
      except:
        return HttpResponse("<h1  style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'> Archive "+ filiere +" " + semester +" N'a pas encore été ajouté</h1>" )      
    else:
